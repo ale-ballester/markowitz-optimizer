@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import quandl
 import pandas as pd
 import scipy.optimize as sco
 
