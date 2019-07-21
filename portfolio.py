@@ -52,12 +52,14 @@ def portfolio_volatility(w, mean_daily_log_returns, tradingdays):
     ret, risk = portfolio_features(w, mean_daily_log_returns, tradingdays)
     return risk
 
+# Returns objects containing:
+# Weights that minimize volatility for each target return
+# The associated volatility
 def efficient_return(target_return, mean_daily_log_returns, tradingdays):
     number_of_assets = len(mean_daily_log_returns)
     args = (mean_daily_log_returns, tradingdays)
 
-    def portfolio_return(w):
-        return portfolio_features(w, mean_daily_log_returns, tradingdays)[0]
+    portfolio_return = lambda w: portfolio_features(w, mean_daily_log_returns, tradingdays)[0]
 
     constraints = ({'type': 'eq', 'fun': lambda x: portfolio_return(x) - target_return},
                    {'type': 'eq', 'fun': lambda x: np.sum(x) - 1})
@@ -71,7 +73,7 @@ def efficient_frontier(mean_daily_log_returns, returns_range, tradingdays):
         efficients.append(efficient_return(r, mean_daily_log_returns, tradingdays))
     return efficients
 
-## Read data
+## Read data: Data will be fed by FIX
 
 stocks = pd.read_csv("data/series.csv", index_col="Date", parse_dates=True)
 
